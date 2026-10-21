@@ -23,7 +23,7 @@ export async function criar(titulo, concluida) {
 
 export async function atualizar(id, titulo, concluida) {
     const [result] = await pool.query(
-        "SET titulo = COALESCE(?, titulo), concluida = COALESCE(?, concluida) WHERE id = ?",
+        "UPDATE tarefas SET titulo = COALESCE(?, titulo), concluida = COALESCE(?, concluida) WHERE id = ?",
         [titulo ?? null, concluida ?? null, id],
     );
     return result.affectedRows;
