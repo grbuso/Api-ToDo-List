@@ -2,12 +2,29 @@
 
 import { Router } from "express";
 import { TarefasController } from "../controllers/tarefas.controller.js";
+import { TarefasMiddleware } from "../middlewares/tarefas.middleware.js";
 
 const router = Router();
 router.get("/", TarefasController.listar);
-router.get("/:id", TarefasController.buscar);
-router.post("/", TarefasController.criar);
-router.put("/:id", TarefasController.atualizar);
-router.delete("/:id", TarefasController.deletar);
+router.get("/:id", TarefasMiddleware.verifyIdFormat, TarefasController.buscar);
+router.post(
+    "/",
+    TarefasMiddleware.verifyTituloObrigatorio,
+    TarefasMiddleware.verifyConcluida,
+    TarefasController.criar,
+);
+router.put(
+    "/:id",
+    TarefasMiddleware.verifyBodyPut,
+    TarefasMiddleware.verifyIdFormat,
+    TarefasMiddleware.verifyTituloOpcional,
+    TarefasMiddleware.verifyConcluida,
+    TarefasController.atualizar,
+);
+router.delete(
+    "/:id",
+    TarefasMiddleware.verifyIdFormat,
+    TarefasController.deletar,
+);
 
 export default router;

@@ -1,6 +1,6 @@
 class CreateTarefaDto {
     constructor({ titulo, concluida }) {
-        this.titulo = titulo;
+        this.titulo = titulo.trim();
         this.concluida = concluida ?? false; // Padrão para false se não fornecido
     }
 }

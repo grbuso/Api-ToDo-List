@@ -18,7 +18,7 @@ export class TarefasController {
             );
         } catch (e) {
             console.error(e);
-            res.status(500).json({ erro: "Falha ao buscar tarefas" });
+            res.status(500).json({ erro: "Falha ao listar tarefas" });
         }
     }
 
