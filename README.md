@@ -32,7 +32,7 @@ Como usar cada operação:
 
 - **POST**
 
-    Adiciona uma nova tarefa. Não é necessário informar um ID, mas é necessário informar o _body_ da tarefa, em JSON. O _body_ deve conter a chave _titulo_ e pode ou não conter a chave booleana _concluida_, que vem false como padrão (0 para false e 1 para true). Exemplos de _body_:
+    Adiciona uma nova tarefa. Não é necessário informar um ID, mas é necessário informar o _body_ da tarefa, em JSON. O _body_ deve conter a chave _titulo_ e pode ou não conter a chave booleana _concluida_, que vem false como padrão (aceita tanto 0/1 quanto false/true). Exemplos de _body_:
 
     ```
     { "titulo": "Tarefa ABC" }

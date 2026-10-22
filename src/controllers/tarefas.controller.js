@@ -3,12 +3,19 @@
 // Só controller fala com o cliente (res)
 
 import { TarefasModel } from "../models/tarefas.model.js";
+import {
+    CreateTarefaDto,
+    UpdateTarefaDto,
+    ResponseTarefaDto,
+} from "../dtos/tarefas.dto.js";
 
 export class TarefasController {
     static async listar(req, res) {
         try {
             const tarefas = await TarefasModel.listar(); // Chama função do model, substituindo a query SQL
-            res.status(200).json(tarefas);
+            res.status(200).json(
+                tarefas.map((tarefa) => new ResponseTarefaDto(tarefa)),
+            );
         } catch (e) {
             console.error(e);
             res.status(500).json({ erro: "Falha ao buscar tarefas" });
@@ -21,7 +28,7 @@ export class TarefasController {
             const tarefa = await TarefasModel.buscar(id);
             if (!tarefa)
                 return res.status(404).json({ erro: "Tarefa não encontrada" });
-            res.status(200).json(tarefa);
+            res.status(200).json(new ResponseTarefaDto(tarefa));
         } catch (e) {
             console.error(e);
             res.status(500).json({ erro: "Falha ao buscar tarefa" });
@@ -30,9 +37,9 @@ export class TarefasController {
 
     static async criar(req, res) {
         try {
-            const { titulo, concluida } = req.body;
-            const id = await TarefasModel.criar(titulo, concluida ?? false);
-            res.status(201).json({ id, titulo });
+            const dto = new CreateTarefaDto(req.body);
+            const id = await TarefasModel.criar(dto.titulo, dto.concluida);
+            res.status(201).json(new ResponseTarefaDto({ id, ...dto }));
         } catch (e) {
             console.error(e);
             res.status(500).json({ erro: "Falha ao criar tarefa" });
@@ -42,11 +49,11 @@ export class TarefasController {
     static async atualizar(req, res) {
         try {
             const { id } = req.params;
-            const { titulo, concluida } = req.body;
+            const dto = new UpdateTarefaDto(req.body);
             const linhasAfetadas = await TarefasModel.atualizar(
                 id,
-                titulo,
-                concluida,
+                dto.titulo,
+                dto.concluida,
             );
 
             if (linhasAfetadas === 0)
