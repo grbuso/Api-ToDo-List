@@ -1,13 +1,30 @@
 // Define GET/POST/PUT/DELETE e aponta para o controller
 
 import { Router } from "express";
-import * as tarefasController from "../controllers/tarefas.controller.js";
+import { TarefasController } from "../controllers/tarefas.controller.js";
+import { TarefasMiddleware } from "../middlewares/tarefas.middleware.js";
 
 const router = Router();
-router.get("/", tarefasController.listar);
-router.get("/:id", tarefasController.buscar);
-router.post("/", tarefasController.criar);
-router.put("/:id", tarefasController.atualizar);
-router.delete("/:id", tarefasController.deletar);
+router.get("/", TarefasController.listar);
+router.get("/:id", TarefasMiddleware.verifyIdFormat, TarefasController.buscar);
+router.post(
+    "/",
+    TarefasMiddleware.verifyTituloObrigatorio,
+    TarefasMiddleware.verifyConcluida,
+    TarefasController.criar,
+);
+router.put(
+    "/:id",
+    TarefasMiddleware.verifyBodyPut,
+    TarefasMiddleware.verifyIdFormat,
+    TarefasMiddleware.verifyTituloOpcional,
+    TarefasMiddleware.verifyConcluida,
+    TarefasController.atualizar,
+);
+router.delete(
+    "/:id",
+    TarefasMiddleware.verifyIdFormat,
+    TarefasController.deletar,
+);
 
 export default router;
