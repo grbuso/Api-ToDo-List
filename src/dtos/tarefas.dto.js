@@ -14,10 +14,11 @@ class UpdateTarefaDto {
 }
 
 class ResponseTarefaDto {
-    constructor({ id, titulo, concluida }) {
+    constructor({ id, titulo, concluida, criada_em }) {
         this.id = id;
         this.titulo = titulo;
         this.concluida = Boolean(concluida); // Retornará false ou true, mesmo que venha 0 ou 1 do banco
+        this.criada_em = criada_em;
     }
 }
 
