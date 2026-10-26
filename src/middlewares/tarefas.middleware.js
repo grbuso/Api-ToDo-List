@@ -1,10 +1,15 @@
+import { BadRequest } from "../errors/errors.js";
+
 export class TarefasMiddleware {
     // Middleware validação do ID
     static verifyIdFormat = (req, res, next) => {
         const { id } = req.params;
-        if (!Number.isInteger(Number(id)) || Number(id) <= 0) {
-            return res.status(400).json({ erro: "Formato de ID inválido" });
-        }
+        if (
+            !Number.isInteger(Number(id)) ||
+            Number(id) <= 0 ||
+            id === undefined
+        )
+            throw new BadRequest("Formato de ID inválido");
         next();
     };
 
@@ -16,11 +21,8 @@ export class TarefasMiddleware {
             typeof titulo !== "string" ||
             titulo.length > 100 ||
             titulo.trim() === ""
-        ) {
-            return res
-                .status(400)
-                .json({ erro: "Formato de título inválido ou ausente" });
-        }
+        )
+            throw new BadRequest("Formato de título inválido ou ausente");
         next();
     };
 
@@ -32,31 +34,26 @@ export class TarefasMiddleware {
             (typeof titulo !== "string" ||
                 titulo.length > 100 ||
                 titulo.trim() === "")
-        ) {
-            return res.status(400).json({ erro: "Formato de título inválido" });
-        }
+        )
+            throw new BadRequest("Formato de título inválido");
         next();
     };
 
     // Middleware validação concluida
     static verifyConcluida = (req, res, next) => {
         const { concluida } = req.body;
-        if (concluida !== undefined && typeof concluida !== "boolean") {
-            return res
-                .status(400)
-                .json({ erro: "Formato de 'concluída' inválido" });
-        }
+        if (concluida !== undefined && typeof concluida !== "boolean")
+            throw new BadRequest("Formato de 'concluida' inválido");
         next();
     };
 
     // Middleware checar body PUT
     static verifyBodyPut = (req, res, next) => {
         const { titulo, concluida } = req.body;
-        if (titulo === undefined && concluida === undefined) {
-            return res.status(400).json({
-                erro: "É necessário fornecer pelo menos um campo para atualizar",
-            });
-        }
+        if (titulo === undefined && concluida === undefined)
+            throw new BadRequest(
+                "É necessário fornecer pelo menos um campo para atualizar",
+            );
         next();
     };
 }

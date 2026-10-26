@@ -15,8 +15,8 @@ router.post(
 );
 router.put(
     "/:id",
-    TarefasMiddleware.verifyBodyPut,
     TarefasMiddleware.verifyIdFormat,
+    TarefasMiddleware.verifyBodyPut,
     TarefasMiddleware.verifyTituloOpcional,
     TarefasMiddleware.verifyConcluida,
     TarefasController.atualizar,
