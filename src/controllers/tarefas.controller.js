@@ -30,8 +30,9 @@ export class TarefasController {
     static async criar(req, res) {
         const dto = new CreateTarefaDto(req.body);
         const id = await TarefasModel.criar(dto.titulo, dto.concluida);
+        const tarefa = await TarefasModel.buscar(id); // Busca a tarefa nova recém criada
 
-        res.status(201).json(new ResponseTarefaDto({ id, ...dto }));
+        res.status(201).json(new ResponseTarefaDto(tarefa)); // Responde a tarefa nova, assim mostrando o criada_em
     }
 
     static async atualizar(req, res) {
